@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">InstagramClone</string>
+
+    <string name="back4app_server_url">https://parseapi.back4app.com/</string>
+    <!-- Paste BOTH strings as required -->
+    <string name="back4app_app_id">8BC6fYLuIp7fMktPgvhoZXdNjScJdm4JieRSWO3I</string>
+    <string name="back4app_client_key">8SMhG6BKcyDAatgX8qeFoBOyJOQkO4HcydVvM8oa</string>
+    <string name="username">Username</string>
+    <string name="log_in">LOG IN</string>
+    <string name="sign_up">SIGN UP</string>
+    <string name="password">Password</string>
+    <string name="instagram">Instagram</string>
+    <string name="description">Description</string>
+    <string name="take_picture">TAKE PICTURE</string>
+    <string name="submit">SUBMIT</string>
+    <string name="home">Home</string>
+    <string name="plus">plus</string>
+    <string name="account">Account</string>
+    <string name="logout">LOGOUT</string>
+    <string name="button_to_open_camera">Button to open camera</string>
+    <string name="button_to_share">Button to share</string>
+</resources>
