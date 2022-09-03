@@ -19,4 +19,6 @@
     <string name="logout">LOGOUT</string>
     <string name="button_to_open_camera">Button to open camera</string>
     <string name="button_to_share">Button to share</string>
+    <string name="share">Share</string>
+    <string name="camera">Camera</string>
 </resources>

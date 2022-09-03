@@ -5,17 +5,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import androidx.appcompat.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
-    ImageView imgBtnCamera, imgBtnShare;
-    TextView tvTitle;
     private BottomNavigationView bottom_navigation;
     final FragmentManager fragmentManager = getSupportFragmentManager();
     final Fragment HomeFragment = new HomeFragment();
@@ -28,10 +29,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        imgBtnCamera = findViewById(R.id.imgBtnCamera);
-        imgBtnShare = findViewById(R.id.imgBtnShare);
-        tvTitle = findViewById(R.id.tvTitle);
         bottom_navigation = findViewById(R.id.bottom_navigation);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         // click on the bottom navigation and check the item selected
         bottom_navigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -56,5 +58,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 
 }
