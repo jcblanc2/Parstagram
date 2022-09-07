@@ -7,17 +7,17 @@
         android:enabled="true"
         android:icon="@drawable/home_selector"
         app:showAsAction="ifRoom"
-        tools:ignore="MenuTitle" />
+        android:title="@string/home"/>
     <item
         android:id="@+id/action_plus"
         android:enabled="true"
         android:icon="@drawable/post_selector"
         app:showAsAction="ifRoom"
-        tools:ignore="MenuTitle" />
+        android:title="@string/compose" />
     <item
         android:id="@+id/action_account"
         android:enabled="true"
         android:icon="@drawable/account_selector"
         app:showAsAction="ifRoom"
-        tools:ignore="MenuTitle" />
+        android:title="@string/profile"/>
 </menu>

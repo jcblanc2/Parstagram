@@ -2,8 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:elevation="10dp"
-    app:titleTextColor="@color/white">
+    android:elevation="30dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -37,9 +36,9 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="16dp"
+            android:backgroundTint="@color/white"
             android:contentDescription="@string/share"
-            android:src="@drawable/send"
-            android:backgroundTint="@color/white"/>
+            android:src="@drawable/send1_fill" />
     </RelativeLayout>
 
 </androidx.appcompat.widget.Toolbar>

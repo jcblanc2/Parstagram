@@ -1,4 +1,4 @@
-package com.example.instagramclone;
+package com.example.instagramclone.fragments;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
@@ -21,7 +21,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import com.example.instagramclone.R;
 import com.example.instagramclone.models.Post;
+import com.google.android.material.textfield.TextInputLayout;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -32,9 +34,9 @@ import java.util.List;
 import com.parse.SaveCallback;
 
 
-public class PostFragment extends Fragment {
+public class ComposeFragment extends Fragment {
 
-    public static final String TAG = "PostFragment";
+    public static final String TAG = "ComposeFragment";
     public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 42;
     private File photoFile;
     public String photoFileName = "photo.jpg";
@@ -42,12 +44,15 @@ public class PostFragment extends Fragment {
     private Button btnTakePicture, btnSubmit;
     private ImageView ivPicture;
     private ProgressBar progressBar;
+    private TextInputLayout description_text_input;
 
+
+    public ComposeFragment(){}
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_post, container, false);
+        return inflater.inflate(R.layout.fragment_compose, container, false);
     }
 
     @Override
@@ -55,13 +60,11 @@ public class PostFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         etDescription = view.findViewById(R.id.etDescription);
+        description_text_input = view.findViewById(R.id.description_text_input);
         btnTakePicture = view.findViewById(R.id.btnTakePicture);
         btnSubmit = view.findViewById(R.id.btnSubmit);
         ivPicture = view.findViewById(R.id.ivPicture);
         progressBar = view.findViewById(R.id.pbLoading);
-
-
-        queryPost();
 
         // click to launch the camera
         btnTakePicture.setOnClickListener(new View.OnClickListener() {
@@ -69,10 +72,6 @@ public class PostFragment extends Fragment {
             public void onClick(View view) {
                 launchCamera();
                 Toast.makeText(getContext(), "Take", Toast.LENGTH_SHORT).show();
-                btnSubmit.setVisibility(View.VISIBLE);
-                btnTakePicture.setVisibility(View.INVISIBLE);
-                etDescription.setVisibility(View.VISIBLE);
-                ivPicture.setVisibility(View.VISIBLE);
             }
         });
 
@@ -87,10 +86,6 @@ public class PostFragment extends Fragment {
 
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 SavePost(description, currentUser, photoFile);
-                btnSubmit.setVisibility(View.INVISIBLE);
-                btnTakePicture.setVisibility(View.VISIBLE);
-                etDescription.setVisibility(View.INVISIBLE);
-                ivPicture.setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -105,6 +100,10 @@ public class PostFragment extends Fragment {
                 Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
                 // RESIZE BITMAP, see section below
                 // Load the taken image into a preview
+                btnSubmit.setVisibility(View.VISIBLE);
+                btnTakePicture.setVisibility(View.INVISIBLE);
+                description_text_input.setVisibility(View.VISIBLE);
+                ivPicture.setVisibility(View.VISIBLE);
                 ivPicture.setImageBitmap(takenImage);
             } else { // Result was a failure
                 Toast.makeText(getContext(), "Error taking picture", Toast.LENGTH_SHORT).show();
@@ -176,26 +175,12 @@ public class PostFragment extends Fragment {
                 etDescription.setText("");
                 ivPicture.setImageResource(0);
                 progressBar.setVisibility(ProgressBar.INVISIBLE); // hide the progressBar
+                btnSubmit.setVisibility(View.INVISIBLE);
+                btnTakePicture.setVisibility(View.VISIBLE);
+                description_text_input.setVisibility(View.INVISIBLE);
+                ivPicture.setVisibility(View.INVISIBLE);
             }
         });
     }
 
-    // method to get a list of posts
-    private void queryPost() {
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.include(Post.KEY_USER);
-        query.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> posts, ParseException e) {
-                if (e != null){
-                    Log.e(TAG, "Issue with getting Posts", e);
-                    Toast.makeText(getContext(), "Issue with getting Posts", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                for (Post post : posts){
-                    Log.i(TAG, "Post: " + post.getDescription() + ", username: " + post.getUser().getUsername());
-                }
-            }
-        });
-    }
 }

@@ -5,11 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
+import com.example.instagramclone.fragments.ComposeFragment;
+import com.example.instagramclone.fragments.PostFragment;
+import com.example.instagramclone.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import androidx.appcompat.widget.Toolbar;
@@ -19,9 +18,9 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
     private BottomNavigationView bottom_navigation;
     final FragmentManager fragmentManager = getSupportFragmentManager();
-    final Fragment HomeFragment = new HomeFragment();
-    final Fragment PostFragment = new PostFragment();
-    final Fragment AccountFragment = new AccountFragment();
+    final Fragment HomeFragment = new PostFragment();
+    final Fragment PostFragment = new ComposeFragment();
+    final Fragment AccountFragment = new ProfileFragment();
 
 
     @Override
@@ -57,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+        bottom_navigation.setSelectedItemId(R.id.action_home);
     }
-
-
 }
