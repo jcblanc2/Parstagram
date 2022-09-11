@@ -1,4 +1,4 @@
-package com.example.instagramclone;
+package com.example.instagramclone.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import android.os.Bundle;
 import android.view.MenuItem;
+
+import com.example.instagramclone.R;
 import com.example.instagramclone.fragments.ComposeFragment;
 import com.example.instagramclone.fragments.PostFragment;
 import com.example.instagramclone.fragments.ProfileFragment;
@@ -16,7 +18,7 @@ import androidx.appcompat.widget.Toolbar;
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
-    private BottomNavigationView bottom_navigation;
+    public static BottomNavigationView bottom_navigation;
     final FragmentManager fragmentManager = getSupportFragmentManager();
     final Fragment HomeFragment = new PostFragment();
     final Fragment PostFragment = new ComposeFragment();

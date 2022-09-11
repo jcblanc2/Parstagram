@@ -1,4 +1,4 @@
-package com.example.instagramclone;
+package com.example.instagramclone.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.example.instagramclone.R;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -28,6 +30,10 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
         btnSignUP = findViewById(R.id.btnSignUP);
+
+        if(ParseUser.getCurrentUser() != null){
+            goMainActivity();
+        }
 
         // click to login
         btnLogin.setOnClickListener(new View.OnClickListener() {

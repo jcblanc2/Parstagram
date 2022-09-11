@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".LoginActivity">
+    tools:context=".activities.LoginActivity">
 
     <TextView
         android:id="@+id/textView"
@@ -20,48 +20,30 @@
         android:fontFamily="@font/instagram_font"
         android:text="@string/instagram" />
 
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/username_text_input"
-        android:layout_width="match_parent"
+    <EditText
+        android:id="@+id/etUsername"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="20dp">
+        android:layout_gravity="center"
+        android:ems="10"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/rounded_edit_text"
+        android:hint="@string/username"
+        android:autofillHints="Username"
+        android:inputType="text" />
 
-        <EditText
-            android:id="@+id/etUsername"
-            android:layout_width="350dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_centerHorizontal="true"
-            android:ems="10"
-            android:backgroundTint="@color/white"
-            android:hint="@string/username"
-            android:autofillHints="Username"
-            android:inputType="text" />
-    </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/passwd_text_input"
-        android:layout_width="match_parent"
+    <EditText
+        android:id="@+id/etPassword"
+        android:layout_width="350dp"
+        android:layout_gravity="center"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center">
-
-        <EditText
-            android:id="@+id/etPassword"
-            android:layout_width="350dp"
-            android:layout_gravity="center"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:autofillHints="Password"
-            android:backgroundTint="@color/white"
-            android:ems="10"
-            android:hint="@string/password"
-            android:inputType="textPassword" />
-    </com.google.android.material.textfield.TextInputLayout>
+        android:layout_marginTop="20dp"
+        android:autofillHints="Password"
+        android:background="@drawable/rounded_edit_text"
+        android:ems="10"
+        android:hint="@string/password"
+        android:inputType="textPassword" />
 
     <Button
         android:id="@+id/btnLogin"

@@ -44,7 +44,6 @@ public class ComposeFragment extends Fragment {
     private Button btnTakePicture, btnSubmit;
     private ImageView ivPicture;
     private ProgressBar progressBar;
-    private TextInputLayout description_text_input;
 
 
     public ComposeFragment(){}
@@ -60,7 +59,6 @@ public class ComposeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         etDescription = view.findViewById(R.id.etDescription);
-        description_text_input = view.findViewById(R.id.description_text_input);
         btnTakePicture = view.findViewById(R.id.btnTakePicture);
         btnSubmit = view.findViewById(R.id.btnSubmit);
         ivPicture = view.findViewById(R.id.ivPicture);
@@ -102,7 +100,7 @@ public class ComposeFragment extends Fragment {
                 // Load the taken image into a preview
                 btnSubmit.setVisibility(View.VISIBLE);
                 btnTakePicture.setVisibility(View.INVISIBLE);
-                description_text_input.setVisibility(View.VISIBLE);
+                etDescription.setVisibility(View.VISIBLE);
                 ivPicture.setVisibility(View.VISIBLE);
                 ivPicture.setImageBitmap(takenImage);
             } else { // Result was a failure
@@ -177,7 +175,7 @@ public class ComposeFragment extends Fragment {
                 progressBar.setVisibility(ProgressBar.INVISIBLE); // hide the progressBar
                 btnSubmit.setVisibility(View.INVISIBLE);
                 btnTakePicture.setVisibility(View.VISIBLE);
-                description_text_input.setVisibility(View.INVISIBLE);
+                etDescription.setVisibility(View.INVISIBLE);
                 ivPicture.setVisibility(View.INVISIBLE);
             }
         });
