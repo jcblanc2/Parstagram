@@ -2,6 +2,8 @@ package com.example.instagramclone.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +11,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,8 +27,11 @@ import com.example.instagramclone.R;
 import com.example.instagramclone.fragments.ProfileFragment;
 import com.example.instagramclone.helpers.TimeFormatter;
 import com.example.instagramclone.models.Post;
+import com.example.instagramclone.models.User;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.json.JSONException;
 import org.parceler.Parcels;
@@ -106,11 +113,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         public void bind(Post post) throws JSONException {
             ParseUser currentUser = ParseUser.getCurrentUser();
 
-            Glide.with(context).load(currentUser.getParseFile("image_profile").getUrl()).transform(new RoundedCorners(100)).into(ivProfileImage);
+            Glide.with(context).load(post.getUser().getParseFile(User.KEY_PROFILE_IMAGE).getUrl()).transform(new RoundedCorners(100)).into(ivProfileImage);
             tvUsername.setText(post.getUser().getUsername());
             tvDescription.setText(post.getDescription());
             tvDate.setText(TimeFormatter.getTimeStamp(post.getCreatedAt().toString()));
-//            tvLike.setText(String.valueOf(post.getNumberLike()));
+            tvLike.setText(String.valueOf(post.getNumberLike()));
 
             ParseFile image = post.getImage();
             if(image != null){
@@ -145,54 +152,55 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
                 }
             });
 
-//            imgBtnHeart.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    like = post.getNumberLike();
-//
-//                    try {
-//                        listUserLike = Post.fromJsonArray(post.getListLike());
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                    Log.i(TAG, currentUser.getObjectId());
-//
-//
-//                    if (listUserLike.contains(currentUser.getObjectId())){
-//                        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.cards_heart_outline);
-//                        imgBtnHeart.setImageDrawable(drawable);
-//
-//                        --like;
-//                    }else {
-//                        ++like;
-//
-//                        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.red_heart);
-//                        imgBtnHeart.setImageDrawable(drawable);
-//                    }
-//
-//                    tvLike.setText(String.valueOf(like));
-//                    saveLike(post, like, currentUser);
-//                }
-//            });
+            imgBtnHeart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    like = post.getNumberLike();
+                    int index = 0;
+
+                    try {
+                        listUserLike = Post.fromJsonArray(post.getListLike());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    Log.i(TAG, listUserLike.toString());
+
+
+                    if (listUserLike.contains(currentUser.getObjectId())){
+                        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.cards_heart_outline);
+                        imgBtnHeart.setImageDrawable(drawable);
+                        --like;
+                        index = listUserLike.indexOf(currentUser.getObjectId());
+                    }else {
+                        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.red_heart);
+                        imgBtnHeart.setImageDrawable(drawable);
+                        ++like;
+                        post.setListLike(currentUser);
+                        index = -1;
+                    }
+
+                    tvLike.setText(String.valueOf(like));
+                    saveLike(post, like, index);
+                }
+            });
         }
 
         // method to save a like
-//        private void saveLike(Post post, int like, ParseUser currentUser) {
-//            post.setNumberLike(like);
-//            post.setListLike(currentUser);
-//
-//            post.saveInBackground(new SaveCallback() {
-//                @Override
-//                public void done(ParseException e) {
-//                    if (e != null){
-//                        Log.e(TAG, "Error while saving", e);
-//                        Toast.makeText(context, "Error while saving", Toast.LENGTH_SHORT).show();
-//                        return;
-//                    }
-//                    Toast.makeText(context, "Liked", Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//        }
+        private void saveLike(Post post, int like, int index) {
+            post.setNumberLike(like);
+            post.removeItemListLike(index);
+
+            post.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e != null){
+                        Log.e(TAG, "Error while saving", e);
+                        Toast.makeText(context, "Error while saving", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+            });
+        }
 
 
     }

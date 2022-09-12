@@ -22,8 +22,8 @@ public class Post extends ParseObject {
     public static final String KEY_USER = "user";
     public static final String KEY_COMMENT= "list_comment";
     public static final String KEY_CREATED_KEY = "createdAt";
-//    public static final String KEY_NUMBER_LIKE= "number_like";
-//    public static final String KEY_LIST_LIKE= "list_like";
+    public static final String KEY_NUMBER_LIKE= "number_like";
+    public static final String KEY_LIST_LIKE= "list_like";
 
     public Post() {}
 
@@ -48,27 +48,33 @@ public class Post extends ParseObject {
         put(KEY_USER, parseUser);
     }
 
-//    public int getNumberLike(){return getInt(KEY_NUMBER_LIKE);}
-//    public void setNumberLike(int nbr){
-//        put(KEY_NUMBER_LIKE, nbr);
-//    }
-//
-//    public JSONArray getListLike(){return getJSONArray(KEY_LIST_LIKE);}
-//    public void setListLike(ParseUser userLike){
-//        add(KEY_LIST_LIKE, userLike);
-//    }
+    public int getNumberLike(){return getInt(KEY_NUMBER_LIKE);}
+    public void setNumberLike(int nbr){put(KEY_NUMBER_LIKE, nbr);}
+
+    public JSONArray getListLike(){return getJSONArray(KEY_LIST_LIKE);}
+    public void setListLike(ParseUser userLike){add(KEY_LIST_LIKE, userLike);}
+    public void removeItemListLike(int index){
+        if (index != -1){
+            getJSONArray(KEY_LIST_LIKE).remove(index);
+        }
+    }
 
     public JSONArray getListComment(){
         return getJSONArray(KEY_COMMENT);
     }
     public void setListComment(ParseObject comment){add(KEY_COMMENT, comment);}
 
-//    public static List<String> fromJsonArray(JSONArray jsonArray) throws JSONException {
-//        List<String> listUserLike = new ArrayList<String>();
-//        for (int i = 0; i < jsonArray.length(); i++){
-//            listUserLike.add(jsonArray.getJSONObject(i).getString("objectId"));
-//        }
-//
-//        return listUserLike;
-//    }
+    public static List<String> fromJsonArray(JSONArray jsonArray) throws JSONException {
+        List<String> listUserLike = new ArrayList<String>();
+
+        try {
+            for (int i = 0; i < jsonArray.length(); i++){
+                listUserLike.add(jsonArray.getJSONObject(i).getString("objectId"));
+            }
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
+
+        return listUserLike;
+    }
 }

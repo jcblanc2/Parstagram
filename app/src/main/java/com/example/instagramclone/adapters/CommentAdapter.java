@@ -9,9 +9,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.instagramclone.R;
+import com.example.instagramclone.activities.DetailActivity;
 import com.example.instagramclone.models.Comment;
 import com.example.instagramclone.models.Post;
+import com.example.instagramclone.models.User;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -20,7 +25,7 @@ import java.util.List;
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder>{
 
     public static final String TAG = "CommentAdapter";
-    public Context context;
+    public static Context context;
     List<Comment> commentList;
 
     public CommentAdapter(Context context1, List<Comment> commentList) {
@@ -64,6 +69,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         public void bind(Comment comment) throws JSONException {
             tvUsername.setText(comment.getUser().getUsername());
             tvComment.setText(comment.getComment());
+            Glide.with(context).load(comment.getUser().getParseFile(User.KEY_PROFILE_IMAGE).getUrl()).transform(new RoundedCorners(100)).into(ivProfileImage);
+
         }
     }
 }

@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.instagramclone.R;
+import com.example.instagramclone.models.User;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -64,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
     // method to singUp
     private void signUpUser(String username, String password) {
         Log.i(TAG, "Attempting to user signIn " + username);
-        ParseUser user = new ParseUser();
+        User user = new User();
         // Set core properties
         user.setUsername(username);
         user.setPassword(password);

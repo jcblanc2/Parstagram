@@ -16,12 +16,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.instagramclone.R;
 import com.example.instagramclone.adapters.CommentAdapter;
+import com.example.instagramclone.helpers.TimeFormatter;
 import com.example.instagramclone.models.Comment;
 import com.example.instagramclone.models.Post;
+import com.example.instagramclone.models.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
 
 import org.json.JSONException;
@@ -85,13 +90,13 @@ public class DetailActivity extends AppCompatActivity {
 
         tvUsername.setText(post.getUser().getUsername());
         tvDescription.setText(post.getDescription());
-        tvDate.setText(post.getCreatedAt().toString());
-//        Glide.with(context).load(R.drawable.clay).transform(new RoundedCorners(100)).into(ivProfileImage);
+        tvDate.setText(TimeFormatter.getTimeStamp(post.getCreatedAt().toString()));
+        Glide.with(DetailActivity.this).load(post.getUser().getParseFile(User.KEY_PROFILE_IMAGE).getUrl()).transform(new RoundedCorners(100)).into(ivProfileImage);
 
-//        ParseFile image = post.getImage();
-//        if(image != null){
-//            Glide.with(getBaseContext()).load(image.getUrl()).into(ivPost);
-//        }
+        ParseFile image = post.getImage();
+        if(image != null){
+            Glide.with(DetailActivity.this).load(image.getUrl()).into(ivPost);
+        }
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override

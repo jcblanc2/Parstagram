@@ -56,8 +56,9 @@ public class ProfileFragment extends Fragment{
     protected List<ParseFile> postList;
     protected ImageGridAdapter adapter;
     private SwipeRefreshLayout swipeContainer;
-    private static  ParseUser currentUser;
+    private static ParseUser currentUser;
     public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 42;
+    public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 3;
     private File photoFile;
     public String photoFileName = "photo.jpg";
 
@@ -88,8 +89,6 @@ public class ProfileFragment extends Fragment{
         // First param is number of columns and second param is orientation i.e Vertical or Horizontal
         StaggeredGridLayoutManager gridLayoutManager =
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        // Attach the layout manager to the recycler view
-        rvImagePost.setLayoutManager(gridLayoutManager);
 
         //Create the adapter
         adapter = new ImageGridAdapter(getContext(), postList);
@@ -97,7 +96,7 @@ public class ProfileFragment extends Fragment{
         //Set the adapter on the recyclerView
         rvImagePost.setAdapter(adapter);
 
-        // Set The layout manager on the recyclerView
+        // Attach the layout manager to the recycler view
         rvImagePost.setLayoutManager(gridLayoutManager);
 
         // Configure the refreshing colors
@@ -182,12 +181,28 @@ public class ProfileFragment extends Fragment{
 
                 alertDialogBuilder.setNegativeButton("Choose Photo",new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
+                    public void onClick(DialogInterface dialog, int which) {openGallery();}
                 });
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+    }
+
+    // method to open the gallery
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        // Create a File reference for future access
+        photoFile = getPhotoFileUri(photoFileName);
+
+        // wrap File object into a content provider
+        // required for API >= 24
+        // See https://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
+        Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.codepath.fileprovider", photoFile);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
+
+
+            startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
+
     }
 
 
@@ -262,6 +277,15 @@ public class ProfileFragment extends Fragment{
                 // Load the taken image into a preview
                 changePhoto(photoFile);
             } else { // Result was a failure
+                Toast.makeText(getContext(), "Error taking picture", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK && data != null) {
+                Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+                changePhoto(photoFile);
+            } else {
                 Toast.makeText(getContext(), "Error taking picture", Toast.LENGTH_SHORT).show();
             }
         }
