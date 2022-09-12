@@ -51,22 +51,27 @@
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="350dp"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_gravity="center"
-        android:layout_marginTop="10dp"
+        android:layout_margin="10dp"
+        android:elevation="5dp"
         android:backgroundTint="@color/blue"
         android:textColor="@color/white"
+        android:background="@drawable/rounded_edit_text"
         android:text="@string/log_in" />
 
     <Button
         android:id="@+id/btnSignUP"
         android:layout_width="350dp"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginTop="10dp"
         android:textColor="@color/white"
         android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:elevation="5dp"
+        android:background="@drawable/rounded_edit_text"
         android:backgroundTint="@color/green"
         android:text="@string/sign_up" />
 
