@@ -53,10 +53,9 @@ public class Post extends ParseObject {
 
     public JSONArray getListLike(){return getJSONArray(KEY_LIST_LIKE);}
     public void setListLike(ParseUser userLike){add(KEY_LIST_LIKE, userLike);}
-    public void removeItemListLike(int index){
-        if (index != -1){
-            getJSONArray(KEY_LIST_LIKE).remove(index);
-        }
+    public void removeItemListLike(List<String> listUserLike){
+        remove(KEY_LIST_LIKE);
+        put(KEY_LIST_LIKE, listUserLike);
     }
 
     public JSONArray getListComment(){

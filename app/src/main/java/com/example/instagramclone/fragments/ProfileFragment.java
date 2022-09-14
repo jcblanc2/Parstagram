@@ -78,7 +78,6 @@ public class ProfileFragment extends Fragment{
         ivProfile = view.findViewById(R.id.ivProfile);
         tvUsername = view.findViewById(R.id.tvUsername);
         btnEditProfile = view.findViewById(R.id.btnEditProfile);
-        btnLogout = view.findViewById(R.id.btnLogout);
         rvImagePost = view.findViewById(R.id.rvImagePost);
         swipeContainer = view.findViewById(R.id.swipeContainer);
         postList = new ArrayList<>();
@@ -86,18 +85,19 @@ public class ProfileFragment extends Fragment{
         tvUsername.setText(currentUser.getUsername());
         Glide.with(getContext()).load(currentUser.getParseFile("image_profile").getUrl()).transform(new RoundedCorners(100)).into(ivProfile);
 
-        // First param is number of columns and second param is orientation i.e Vertical or Horizontal
-        StaggeredGridLayoutManager gridLayoutManager =
-                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-
         //Create the adapter
         adapter = new ImageGridAdapter(getContext(), postList);
 
         //Set the adapter on the recyclerView
         rvImagePost.setAdapter(adapter);
 
+        // First param is number of columns and second param is orientation i.e Vertical or Horizontal
+        StaggeredGridLayoutManager gridLayoutManager =
+                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+
         // Attach the layout manager to the recycler view
         rvImagePost.setLayoutManager(gridLayoutManager);
+        queryPost();
 
         // Configure the refreshing colors
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
@@ -114,8 +114,6 @@ public class ProfileFragment extends Fragment{
             }
         });
 
-        queryPost();
-
         // click to logout
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,7 +121,6 @@ public class ProfileFragment extends Fragment{
                 ParseUser.logOut();
                 Intent intent = new Intent(getContext(), LoginActivity.class);
                 startActivity(intent);
-                Log.i(TAG, "Logout");
             }
         });
 
