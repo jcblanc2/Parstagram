@@ -23,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,7 +50,8 @@ import java.util.List;
 public class ProfileFragment extends Fragment{
 
     public static final String TAG = "ProfileFragment";
-    private Button btnLogout, btnEditProfile;
+    private Button btnLogout;
+    private ImageButton btnEditProfile;
     private ImageView ivProfile;
     private TextView tvUsername;
     private RecyclerView rvImagePost;

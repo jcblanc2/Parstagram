@@ -95,7 +95,7 @@ public class DetailActivity extends AppCompatActivity {
 
         ParseFile image = post.getImage();
         if(image != null){
-            Glide.with(DetailActivity.this).load(image.getUrl()).into(ivPost);
+            Glide.with(DetailActivity.this).load(image.getUrl()).transform(new RoundedCorners(30)).into(ivPost);
         }
 
         btnBack.setOnClickListener(new View.OnClickListener() {

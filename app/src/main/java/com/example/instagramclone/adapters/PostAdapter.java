@@ -132,9 +132,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             }
 
             // set color for heart
-            if (listUserLike.contains(currentUser.getObjectId())) {
-                Drawable drawable = ContextCompat.getDrawable(context, R.drawable.red_heart);
-                imgBtnHeart.setImageDrawable(drawable);
+            try{
+                if (listUserLike.contains(currentUser.getObjectId())) {
+                    Drawable drawable = ContextCompat.getDrawable(context, R.drawable.red_heart);
+                    imgBtnHeart.setImageDrawable(drawable);
+                }
+            }catch (NullPointerException e){
+                e.printStackTrace();
             }
 
 

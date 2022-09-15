@@ -38,11 +38,9 @@
     <ImageView
         android:id="@+id/ivPostDetail"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="250dp"
         android:layout_below="@+id/ivProfileImageDetail"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_margin="5dp"
         android:contentDescription="@string/image_posted"
         tools:srcCompat="@tools:sample/avatars" />
 

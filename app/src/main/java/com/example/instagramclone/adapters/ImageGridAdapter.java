@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.instagramclone.R;
 import com.example.instagramclone.models.Post;
 import com.parse.ParseFile;
@@ -64,7 +65,7 @@ public class ImageGridAdapter extends RecyclerView.Adapter<ImageGridAdapter.View
         }
 
         public void bind(ParseFile image){
-            Glide.with(context).load(image.getUrl()).into(ivPostImage);
+            Glide.with(context).load(image.getUrl()).transform(new RoundedCorners(30)).into(ivPostImage);
         }
     }
 

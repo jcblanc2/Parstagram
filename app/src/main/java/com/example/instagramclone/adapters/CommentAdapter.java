@@ -1,5 +1,6 @@
 package com.example.instagramclone.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -44,7 +47,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Comment comment = commentList.get(position);
         try {
-            holder.bind(comment);
+            holder.bind(comment, holder);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -66,11 +69,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             ivProfileImage = itemView.findViewById(R.id.ivProfileImage);
         }
 
-        public void bind(Comment comment) throws JSONException {
+        public void bind(Comment comment, ViewHolder holder) throws JSONException {
             tvUsername.setText(comment.getUser().getUsername());
             tvComment.setText(comment.getComment());
-            Glide.with(context).load(comment.getUser().getParseFile(User.KEY_PROFILE_IMAGE).getUrl()).transform(new RoundedCorners(100)).into(ivProfileImage);
-
+            Glide.with(holder.itemView.getContext()).load(comment.getUser().getParseFile(User.KEY_PROFILE_IMAGE).getUrl()).transform(new RoundedCorners(100)).into(ivProfileImage);
         }
     }
 }
