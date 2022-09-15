@@ -7,7 +7,6 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -34,22 +33,8 @@ public class PostFragment extends Fragment {
     protected PostAdapter adapter;
     private SwipeRefreshLayout swipeContainer;
     private Context context;
-    FragmentActivity listener;
     private EndlessRecyclerViewScrollListener scrollListener;
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof Activity){
-            this.listener = (FragmentActivity) context;
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        this.listener = null;
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {

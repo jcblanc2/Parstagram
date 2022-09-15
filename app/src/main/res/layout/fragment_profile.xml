@@ -42,24 +42,28 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tvUsername"
         android:layout_centerHorizontal="true"
-        android:backgroundTint="@color/gray"
-        android:layout_margin="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/rounded_edit_text"
+        android:backgroundTint="@color/gray"
         android:text="@string/logout" />
 
     <View
         android:id="@+id/divider1"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_below="@id/btnLogout"
         android:layout_marginTop="5dp"
-        android:layout_below="@id/tvUsername"
+        android:layout_marginBottom="5dp"
         android:background="?android:attr/listDivider" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/btnLogout"
+        android:layout_below="@+id/divider1"
         android:layout_marginTop="5dp">
 
         <androidx.recyclerview.widget.RecyclerView
