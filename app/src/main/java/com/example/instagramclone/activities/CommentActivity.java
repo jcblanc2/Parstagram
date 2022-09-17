@@ -72,6 +72,7 @@ public class CommentActivity extends AppCompatActivity {
                 String comment = etComment.getText().toString();
                 if (comment.isEmpty()){
                     Toast.makeText(context, "Comment cannot be empty", Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
                 ParseUser currentUser = ParseUser.getCurrentUser();
@@ -80,7 +81,7 @@ public class CommentActivity extends AppCompatActivity {
         });
     }
 
-    // method to save a post
+    // method to save a comment
     private void SaveComment(String description, ParseUser currentUser) {
         ParseObject object = ParseObject.create("Comment");
         object.put("user", currentUser);
