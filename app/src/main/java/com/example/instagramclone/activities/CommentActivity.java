@@ -15,8 +15,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.instagramclone.R;
 import com.example.instagramclone.models.Post;
+import com.example.instagramclone.models.User;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -49,9 +51,11 @@ public class CommentActivity extends AppCompatActivity {
         etComment = findViewById(R.id.etComment);
         btnComment = findViewById(R.id.btnComment);
 
-        post = Parcels.unwrap(getIntent().getParcelableExtra("post"));
+        post = Parcels.unwrap(getIntent().getParcelableExtra(MainActivity.POST));
         ParseUser currentUser = ParseUser.getCurrentUser();
         tvUserName.setText(currentUser.getUsername());
+        Glide.with(CommentActivity.this).load(currentUser.getParseFile(User.KEY_PROFILE_IMAGE).getUrl()).into(profileImage);
+
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override

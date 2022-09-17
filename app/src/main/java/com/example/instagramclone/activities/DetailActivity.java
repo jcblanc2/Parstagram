@@ -2,12 +2,14 @@ package com.example.instagramclone.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.instagramclone.R;
 import com.example.instagramclone.adapters.CommentAdapter;
+import com.example.instagramclone.adapters.PostAdapter;
 import com.example.instagramclone.helpers.TimeFormatter;
 import com.example.instagramclone.models.Comment;
 import com.example.instagramclone.models.Post;
@@ -28,6 +31,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import org.json.JSONException;
 import org.parceler.Parcels;
@@ -53,6 +57,8 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        ParseUser currentUser = ParseUser.getCurrentUser();
+
         Toolbar toolbar = findViewById(R.id.toolbar_detail);
         ImageButton btnBack = findViewById(R.id.iconBack);
         setSupportActionBar(toolbar);
@@ -69,11 +75,21 @@ public class DetailActivity extends AppCompatActivity {
         imgBtnSave = findViewById(R.id.imgBtnSaveDetail);
         rvComment = findViewById(R.id.rvComment);
 
-        Post post = Parcels.unwrap(getIntent().getParcelableExtra("post"));
+        Post post = Parcels.unwrap(getIntent().getParcelableExtra(MainActivity.POST));
         post.getListComment();
         try {
             commentsParse = Comment.fromJsonArray(post.getListComment());
         } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        // set color for heart
+        try{
+            if (PostAdapter.listUserLike.contains(currentUser.getObjectId())) {
+                Drawable drawable = ContextCompat.getDrawable(context, R.drawable.red_heart);
+                imgBtnHeart.setImageDrawable(drawable);
+            }
+        }catch (NullPointerException e){
             e.printStackTrace();
         }
 

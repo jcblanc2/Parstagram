@@ -27,14 +27,14 @@ import java.util.List;
 
 public class PostFragment extends Fragment {
 
-    public static final String TAG = "HomeFragment";
+    public static final String TAG = "PostFragment";
     protected RecyclerView rvPost;
     protected List<Post> postList;
     protected PostAdapter adapter;
     private SwipeRefreshLayout swipeContainer;
     private Context context;
+    private static ParseQuery<Post> query;
     private EndlessRecyclerViewScrollListener scrollListener;
-
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -90,16 +90,18 @@ public class PostFragment extends Fragment {
             }
         };
 
-        // Adds the scroll listener to RecyclerView
+//      Adds the scroll listener to RecyclerView
         rvPost.addOnScrollListener(scrollListener);
 
         queryPost();
     }
 
     private void loadMoreData() {
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        query = ParseQuery.getQuery(Post.class);
+
         query.include(Post.KEY_USER);
-        query.addDescendingOrder(Post.KEY_CREATED_KEY);
+        query.setLimit(20);
+
         query.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> posts, ParseException e) {
@@ -108,22 +110,14 @@ public class PostFragment extends Fragment {
                     Toast.makeText(getContext(), "Issue with getting Posts", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                for (Post post : posts){
-                    Log.i(TAG, "Post: " + post.getDescription() + ", username: " + post.getUser().getUsername());
-                }
 
-                // Remember to CLEAR OUT old items before appending in the new ones
-                // ...the data has come back, add new items to your adapter...
-                // Now we call setRefreshing(false) to signal refresh has finished
-                adapter.clear();
                 adapter.addAll(posts);
-                swipeContainer.setRefreshing(false);
             }
         });
     }
 
     protected void queryPost() {
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
         query.setLimit(20);
         query.addDescendingOrder(Post.KEY_CREATED_KEY);
@@ -135,17 +129,15 @@ public class PostFragment extends Fragment {
                     Toast.makeText(getContext(), "Issue with getting Posts", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                for (Post post : posts){
-                    Log.i(TAG, "Post: " + post.getDescription() + ", username: " + post.getUser().getUsername());
-                }
 
-                // Remember to CLEAR OUT old items before appending in the new ones
-                // ...the data has come back, add new items to your adapter...
-                // Now we call setRefreshing(false) to signal refresh has finished
+                // CLEAR OUT old items before appending in the new ones
                 adapter.clear();
+                // ...the data has come back, add new items to your adapter...
                 adapter.addAll(posts);
+                // Now we call setRefreshing(false) to signal refresh has finished
                 swipeContainer.setRefreshing(false);
             }
         });
     }
+
 }

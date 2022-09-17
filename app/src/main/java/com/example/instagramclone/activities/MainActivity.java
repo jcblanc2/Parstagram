@@ -18,6 +18,7 @@ import androidx.appcompat.widget.Toolbar;
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
+    public static final String POST = "post";
     public static BottomNavigationView bottom_navigation;
     final FragmentManager fragmentManager = getSupportFragmentManager();
     final Fragment HomeFragment = new PostFragment();

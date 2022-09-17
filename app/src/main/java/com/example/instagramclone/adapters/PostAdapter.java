@@ -3,6 +3,7 @@ package com.example.instagramclone.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -155,7 +156,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
                 @Override
                 public void onClick(View view) {
                     FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-                    fragmentManager.beginTransaction().replace(R.id.fragmentPlaceholder, new ProfileFragment()).commit();
+                    // set parameters
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable(MainActivity.POST, Parcels.wrap(post));
+
+                    ProfileFragment profileFragment = new ProfileFragment();
+                    profileFragment.setArguments(bundle);
+
+                    fragmentManager.beginTransaction().replace(R.id.fragmentPlaceholder, profileFragment).commit();
                     MainActivity.bottom_navigation.setSelectedItemId(R.id.action_account);
                 }
             });

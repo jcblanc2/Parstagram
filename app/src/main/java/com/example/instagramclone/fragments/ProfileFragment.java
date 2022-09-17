@@ -32,6 +32,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.instagramclone.activities.LoginActivity;
 import com.example.instagramclone.R;
+import com.example.instagramclone.activities.MainActivity;
 import com.example.instagramclone.adapters.ImageGridAdapter;
 import com.example.instagramclone.models.Post;
 import com.example.instagramclone.models.User;
@@ -42,6 +43,8 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import org.parceler.Parcels;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -63,6 +66,8 @@ public class ProfileFragment extends Fragment{
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 3;
     private File photoFile;
     public String photoFileName = "photo.jpg";
+    private String userName;
+    private String imgUrl;
 
     @Nullable
     @Override
@@ -74,8 +79,6 @@ public class ProfileFragment extends Fragment{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        currentUser = ParseUser.getCurrentUser();
-
         btnLogout = view.findViewById(R.id.btnLogout);
         ivProfile = view.findViewById(R.id.ivProfile);
         tvUsername = view.findViewById(R.id.tvUsername);
@@ -84,8 +87,21 @@ public class ProfileFragment extends Fragment{
         swipeContainer = view.findViewById(R.id.swipeContainer);
         postList = new ArrayList<>();
 
-        tvUsername.setText(currentUser.getUsername());
-        Glide.with(getContext()).load(currentUser.getParseFile("image_profile").getUrl()).transform(new RoundedCorners(100)).into(ivProfile);
+        Bundle bundle = getArguments();
+        if(bundle != null){
+            Post post = Parcels.unwrap(bundle.getParcelable(MainActivity.POST));
+            userName = post.getUser().getUsername();
+            currentUser = post.getUser();
+            btnEditProfile.setVisibility(View.INVISIBLE);
+            Log.i(TAG, "0000000000000000000 "+userName);
+            imgUrl = post.getUser().getParseFile(User.KEY_PROFILE_IMAGE).getUrl();
+        }else {
+            currentUser = ParseUser.getCurrentUser();
+            userName = currentUser.getUsername();
+            imgUrl = currentUser.getParseFile(User.KEY_PROFILE_IMAGE).getUrl();
+        }
+        tvUsername.setText(userName);
+        Glide.with(getContext()).load(imgUrl).transform(new RoundedCorners(100)).into(ivProfile);
 
         //Create the adapter
         adapter = new ImageGridAdapter(getContext(), postList);
@@ -170,18 +186,18 @@ public class ProfileFragment extends Fragment{
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
         alertDialogBuilder.setMessage("Edit photo profile");
 
-                alertDialogBuilder.setPositiveButton("Take Photo",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                launchCamera();
-                            }
-                        });
-
-                alertDialogBuilder.setNegativeButton("Choose Photo",new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setPositiveButton("Take Photo",
+                new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {openGallery();}
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        launchCamera();
+                    }
                 });
+
+        alertDialogBuilder.setNegativeButton("Choose Photo",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {openGallery();}
+        });
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
@@ -200,7 +216,7 @@ public class ProfileFragment extends Fragment{
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
 
 
-            startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
+        startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
 
     }
 
