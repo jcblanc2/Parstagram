@@ -25,6 +25,7 @@ import com.example.instagramclone.activities.CommentActivity;
 import com.example.instagramclone.activities.DetailActivity;
 import com.example.instagramclone.activities.MainActivity;
 import com.example.instagramclone.R;
+import com.example.instagramclone.fragments.ComposeFragment;
 import com.example.instagramclone.fragments.ProfileFragment;
 import com.example.instagramclone.helpers.TimeFormatter;
 import com.example.instagramclone.models.Post;
@@ -156,15 +157,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
                 @Override
                 public void onClick(View view) {
                     FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-                    // set parameters
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable(MainActivity.POST, Parcels.wrap(post));
 
-                    ProfileFragment profileFragment = new ProfileFragment();
+                    // set parameters
+                    ProfileFragment profileFragment = ProfileFragment.newInstance("Some Title");
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("p", Parcels.wrap(post));
                     profileFragment.setArguments(bundle);
 
                     fragmentManager.beginTransaction().replace(R.id.fragmentPlaceholder, profileFragment).commit();
-                    MainActivity.bottom_navigation.setSelectedItemId(R.id.action_account);
                 }
             });
 

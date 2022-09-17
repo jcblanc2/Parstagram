@@ -66,8 +66,16 @@ public class ProfileFragment extends Fragment{
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 3;
     private File photoFile;
     public String photoFileName = "photo.jpg";
-    private String userName;
-    private String imgUrl;
+    private String userName, imgUrl;
+
+
+    public static ProfileFragment newInstance(String title) {
+        ProfileFragment frag = new ProfileFragment();
+        Bundle args = new Bundle();
+        args.putString("title", title);
+        frag.setArguments(args);
+        return frag;
+    }
 
     @Nullable
     @Override
@@ -89,11 +97,10 @@ public class ProfileFragment extends Fragment{
 
         Bundle bundle = getArguments();
         if(bundle != null){
-            Post post = Parcels.unwrap(bundle.getParcelable(MainActivity.POST));
+            Post post = Parcels.unwrap(bundle.getParcelable("p"));
             userName = post.getUser().getUsername();
             currentUser = post.getUser();
             btnEditProfile.setVisibility(View.INVISIBLE);
-            Log.i(TAG, "0000000000000000000 "+userName);
             imgUrl = post.getUser().getParseFile(User.KEY_PROFILE_IMAGE).getUrl();
         }else {
             currentUser = ParseUser.getCurrentUser();
