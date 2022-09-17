@@ -59,22 +59,31 @@
         android:layout_marginBottom="5dp"
         android:background="?android:attr/listDivider" />
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeContainer"
+    <GridView
+        android:id="@+id/gridView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/divider1"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="5dp"
+        android:numColumns ="2"
+        android:stretchMode ="columnWidth" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvImagePost"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="0dp" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+<!--    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout-->
+<!--        android:id="@+id/swipeContainer"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_below="@+id/divider1"-->
+<!--        android:layout_marginTop="5dp">-->
+
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/rvImagePost"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_alignParentStart="true"-->
+<!--            android:layout_alignParentTop="true"-->
+<!--            android:layout_marginStart="0dp"-->
+<!--            android:layout_marginTop="0dp" />-->
+<!--    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->
 
 
 </RelativeLayout>

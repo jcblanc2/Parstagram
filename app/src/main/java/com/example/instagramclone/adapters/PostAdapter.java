@@ -161,7 +161,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
                     // set parameters
                     ProfileFragment profileFragment = ProfileFragment.newInstance("Some Title");
                     Bundle bundle = new Bundle();
-                    bundle.putParcelable("p", Parcels.wrap(post));
+                    bundle.putParcelable(MainActivity.POST, Parcels.wrap(post));
                     profileFragment.setArguments(bundle);
 
                     fragmentManager.beginTransaction().replace(R.id.fragmentPlaceholder, profileFragment).commit();

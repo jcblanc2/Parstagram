@@ -23,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -57,10 +58,9 @@ public class ProfileFragment extends Fragment{
     private ImageButton btnEditProfile;
     private ImageView ivProfile;
     private TextView tvUsername;
-    private RecyclerView rvImagePost;
+    private GridView gridView;
     protected List<ParseFile> postList;
     protected ImageGridAdapter adapter;
-    private SwipeRefreshLayout swipeContainer;
     private static ParseUser currentUser;
     public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 42;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 3;
@@ -91,16 +91,16 @@ public class ProfileFragment extends Fragment{
         ivProfile = view.findViewById(R.id.ivProfile);
         tvUsername = view.findViewById(R.id.tvUsername);
         btnEditProfile = view.findViewById(R.id.btnEditProfile);
-        rvImagePost = view.findViewById(R.id.rvImagePost);
-        swipeContainer = view.findViewById(R.id.swipeContainer);
+        gridView = view.findViewById(R.id.gridView);
         postList = new ArrayList<>();
 
         Bundle bundle = getArguments();
         if(bundle != null){
-            Post post = Parcels.unwrap(bundle.getParcelable("p"));
+            Post post = Parcels.unwrap(bundle.getParcelable(MainActivity.POST));
             userName = post.getUser().getUsername();
             currentUser = post.getUser();
             btnEditProfile.setVisibility(View.INVISIBLE);
+            btnLogout.setVisibility(View.INVISIBLE);
             imgUrl = post.getUser().getParseFile(User.KEY_PROFILE_IMAGE).getUrl();
         }else {
             currentUser = ParseUser.getCurrentUser();
@@ -113,31 +113,11 @@ public class ProfileFragment extends Fragment{
         //Create the adapter
         adapter = new ImageGridAdapter(getContext(), postList);
 
-        //Set the adapter on the recyclerView
-        rvImagePost.setAdapter(adapter);
+        //Set the adapter on the gridView
+        gridView.setAdapter(adapter);
 
-        // First param is number of columns and second param is orientation i.e Vertical or Horizontal
-        StaggeredGridLayoutManager gridLayoutManager =
-                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-
-        // Attach the layout manager to the recycler view
-        rvImagePost.setLayoutManager(gridLayoutManager);
         queryPost();
 
-        // Configure the refreshing colors
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
-
-        // Setup refresh listener which triggers new data loading
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Log.i(TAG, "Fetching new data!! (setOnRefreshListener)");
-                queryPost();
-            }
-        });
 
         // click to logout
         btnLogout.setOnClickListener(new View.OnClickListener() {
@@ -177,12 +157,9 @@ public class ProfileFragment extends Fragment{
                 for (Post post:posts){
                     listImages.add(post.getImage());
                 }
-                // Remember to CLEAR OUT old items before appending in the new ones
-                // ...the data has come back, add new items to your adapter...
-                // Now we call setRefreshing(false) to signal refresh has finished
-                adapter.clear();
-                adapter.addAll(listImages);
-                swipeContainer.setRefreshing(false);
+
+                postList.addAll(listImages);
+                adapter.notifyDataSetChanged();
             }
         });
     }
