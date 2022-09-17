@@ -32,6 +32,7 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.json.JSONException;
 import org.parceler.Parcels;
@@ -43,14 +44,15 @@ public class DetailActivity extends AppCompatActivity {
 
     public static final String TAG = "DetailActivity";
     protected ImageView ivProfileImage, ivPost;
-    TextView tvUsername, tvDescription, tvDate;
+    TextView tvUsername, tvDescription, tvDate, tvLikeDetail;
     ImageButton imgBtnSettings, imgBtnHeart, imgBtnComment, imgBtnSend, imgBtnSave;
     RecyclerView rvComment;
     protected List<String> commentsParse;
     protected List<Comment> comments;
     protected CommentAdapter adapter;
     Context context;
-    Fragment fragment;
+    public static int like;
+    public static ArrayList<String> listUserLike;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +69,7 @@ public class DetailActivity extends AppCompatActivity {
         ivPost = findViewById(R.id.ivPostDetail);
         tvUsername = findViewById(R.id.tvUsernameDetail);
         tvDate = findViewById(R.id.tvDateDetail);
+        tvLikeDetail = findViewById(R.id.tvLikeDetail);
         tvDescription = findViewById(R.id.tvDescriptionDetail);
         imgBtnSettings = findViewById(R.id.imgBtnSettingsDetail);
         imgBtnHeart = findViewById(R.id.imgBtnHeartDetail);
@@ -83,10 +86,17 @@ public class DetailActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        // get list user who liked this post
+        try {
+            listUserLike = Post.fromJsonArray(post.getListLike());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         // set color for heart
         try{
-            if (PostAdapter.listUserLike.contains(currentUser.getObjectId())) {
-                Drawable drawable = ContextCompat.getDrawable(context, R.drawable.red_heart);
+            if (listUserLike.contains(currentUser.getObjectId())) {
+                Drawable drawable = ContextCompat.getDrawable(DetailActivity.this, R.drawable.red_heart);
                 imgBtnHeart.setImageDrawable(drawable);
             }
         }catch (NullPointerException e){
@@ -106,6 +116,7 @@ public class DetailActivity extends AppCompatActivity {
 
         tvUsername.setText(post.getUser().getUsername());
         tvDescription.setText(post.getDescription());
+        tvLikeDetail.setText(String.valueOf(post.getNumberLike()) + " likes");
         tvDate.setText(TimeFormatter.getTimeStamp(post.getCreatedAt().toString()));
         Glide.with(DetailActivity.this).load(post.getUser().getParseFile(User.KEY_PROFILE_IMAGE).getUrl()).transform(new RoundedCorners(100)).into(ivProfileImage);
 
@@ -120,6 +131,39 @@ public class DetailActivity extends AppCompatActivity {
                 Intent i = new Intent(DetailActivity.this, MainActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivityIfNeeded(i, 0);
+            }
+        });
+
+        imgBtnComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(DetailActivity.this, CommentActivity.class);
+                i.putExtra("post", Parcels.wrap(post));
+                startActivity(i);
+            }
+        });
+
+        imgBtnHeart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                like = post.getNumberLike();
+                int index;
+
+                if (!listUserLike.contains(currentUser.getObjectId())){
+                    Drawable drawable = ContextCompat.getDrawable(DetailActivity.this, R.drawable.red_heart);
+                    imgBtnHeart.setImageDrawable(drawable);
+                    like++;
+                    index = -1;
+
+                }else {
+                    Drawable drawable = ContextCompat.getDrawable(DetailActivity.this, R.drawable.cards_heart_outline);
+                    imgBtnHeart.setImageDrawable(drawable);
+                    like--;
+                    index = listUserLike.indexOf(currentUser.getObjectId());
+                }
+
+                tvLikeDetail.setText(String.valueOf(like) + " likes");
+                saveLike(post, like, index, currentUser);
             }
         });
 
@@ -146,5 +190,30 @@ public class DetailActivity extends AppCompatActivity {
         });
     }
 
+
+    // method to save a like
+    private void saveLike(Post post, int like, int index, ParseUser currentUser) {
+        post.setNumberLike(like);
+
+        if (index == -1){
+            post.setListLike(currentUser);
+            listUserLike.add(currentUser.getObjectId());
+        }else {
+            listUserLike.remove(index);
+            post.removeItemListLike(listUserLike);
+        }
+
+        post.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null){
+                    Log.e(TAG, "Error while saving", e);
+                    Toast.makeText(context, "Error while saving", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Log.i(TAG, listUserLike.toString());
+            }
+        });
+    }
 
 }

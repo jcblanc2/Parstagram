@@ -38,6 +38,7 @@ import com.parse.SaveCallback;
 import org.json.JSONException;
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
@@ -45,7 +46,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
     public static final String TAG = "PostAdapter";
     public static Context context;
     List<Post> posts;
-    public static List<String> listUserLike;
+    private static ArrayList<String> listUserLikes;
 
     public PostAdapter(Context context1, List<Post> posts) {
         this.context = context1;
@@ -114,6 +115,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
 
         public void bind(Post post) throws JSONException {
             ParseUser currentUser = ParseUser.getCurrentUser();
+            listUserLikes = Post.fromJsonArray(post.getListLike());
 
             Glide.with(context).load(post.getUser().getParseFile(User.KEY_PROFILE_IMAGE).getUrl()).transform(new RoundedCorners(100)).into(ivProfileImage);
             tvUsername.setText(post.getUser().getUsername());
@@ -126,22 +128,42 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
                 Glide.with(context).load(image.getUrl()).into(ivPost);
             }
 
-            // get list user who liked this post
-            try {
-                listUserLike = Post.fromJsonArray(post.getListLike());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
             // set color for heart
             try{
-                if (listUserLike.contains(currentUser.getObjectId())) {
+                if (listUserLikes.contains(currentUser.getObjectId())) {
                     Drawable drawable = ContextCompat.getDrawable(context, R.drawable.red_heart);
+                    imgBtnHeart.setImageDrawable(drawable);
+                }else {
+                    Drawable drawable = ContextCompat.getDrawable(context, R.drawable.cards_heart_outline);
                     imgBtnHeart.setImageDrawable(drawable);
                 }
             }catch (NullPointerException e){
                 e.printStackTrace();
             }
+
+            imgBtnHeart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    like = post.getNumberLike();
+                    int index;
+
+                    if (!listUserLikes.contains(currentUser.getObjectId())){
+                        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.red_heart);
+                        imgBtnHeart.setImageDrawable(drawable);
+                        like++;
+                        index = -1;
+
+                    }else {
+                        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.cards_heart_outline);
+                        imgBtnHeart.setImageDrawable(drawable);
+                        like--;
+                        index = listUserLikes.indexOf(currentUser.getObjectId());
+                    }
+
+                    tvLike.setText(String.valueOf(like) + " likes");
+                    saveLike(post, like, index, currentUser);
+                }
+            });
 
 
             container1.setOnClickListener(new View.OnClickListener() {
@@ -176,30 +198,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
                     context.startActivity(i);
                 }
             });
-
-            imgBtnHeart.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    like = post.getNumberLike();
-                    int index;
-
-                    if (!listUserLike.contains(currentUser.getObjectId())){
-                        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.red_heart);
-                        imgBtnHeart.setImageDrawable(drawable);
-                        like++;
-                        index = -1;
-
-                    }else {
-                        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.cards_heart_outline);
-                        imgBtnHeart.setImageDrawable(drawable);
-                        like--;
-                        index = listUserLike.indexOf(currentUser.getObjectId());
-                    }
-
-                    tvLike.setText(String.valueOf(like) + " likes");
-                    saveLike(post, like, index, currentUser);
-                }
-            });
         }
 
         // method to save a like
@@ -208,10 +206,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
 
             if (index == -1){
                 post.setListLike(currentUser);
-                Log.i(TAG, listUserLike.toString());
+                listUserLikes.add(currentUser.getObjectId());
             }else {
-                listUserLike.remove(index);
-                post.removeItemListLike(listUserLike);
+                listUserLikes.remove(index);
+                post.removeItemListLike(listUserLikes);
             }
 
             post.saveInBackground(new SaveCallback() {
@@ -222,6 +220,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
                         Toast.makeText(context, "Error while saving", Toast.LENGTH_SHORT).show();
                         return;
                     }
+                    Log.i(TAG, listUserLikes.toString());
+
                 }
             });
         }

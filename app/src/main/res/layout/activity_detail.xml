@@ -111,12 +111,21 @@
         tools:text="My headshot" />
 
     <TextView
+        android:id="@+id/tvLikeDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvDescriptionDetail"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        tools:text="2 likes" />
+
+    <TextView
         android:id="@+id/tvDateDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
-        android:layout_below="@+id/tvDescriptionDetail"
+        android:layout_below="@+id/tvLikeDetail"
         tools:ignore="RelativeOverlap"
         tools:text="10/23/1" />
 

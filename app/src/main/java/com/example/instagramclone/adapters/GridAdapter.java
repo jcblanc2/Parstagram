@@ -14,14 +14,14 @@ import com.example.instagramclone.R;
 import com.parse.ParseFile;
 import java.util.List;
 
-public class ImageGridAdapter extends BaseAdapter {
+public class GridAdapter extends BaseAdapter {
 
-    public static final String TAG = "ImageGridAdapter";
+    public static final String TAG = "GridAdapter";
     public static Context context;
     List<ParseFile> posts;
     LayoutInflater inflater;
 
-    public ImageGridAdapter(Context context1, List<ParseFile> posts) {
+    public GridAdapter(Context context1, List<ParseFile> posts) {
         this.context = context1;
         this.posts = posts;
     }
@@ -54,7 +54,7 @@ public class ImageGridAdapter extends BaseAdapter {
 
         ImageView ivPostImage = view.findViewById(R.id.ivPostImage);
         ParseFile image = posts.get(i);
-        Glide.with(context).load(image.getUrl()).into(ivPostImage);
+        Glide.with(context).load(image.getUrl()).transform(new RoundedCorners(100)).into(ivPostImage);
 
         return view;
     }

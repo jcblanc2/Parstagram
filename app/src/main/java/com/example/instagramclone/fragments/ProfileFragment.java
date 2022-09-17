@@ -5,9 +5,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -34,13 +31,12 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.instagramclone.activities.LoginActivity;
 import com.example.instagramclone.R;
 import com.example.instagramclone.activities.MainActivity;
-import com.example.instagramclone.adapters.ImageGridAdapter;
+import com.example.instagramclone.adapters.GridAdapter;
 import com.example.instagramclone.models.Post;
 import com.example.instagramclone.models.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -60,7 +56,7 @@ public class ProfileFragment extends Fragment{
     private TextView tvUsername;
     private GridView gridView;
     protected List<ParseFile> postList;
-    protected ImageGridAdapter adapter;
+    protected GridAdapter adapter;
     private static ParseUser currentUser;
     public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 42;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 3;
@@ -111,7 +107,7 @@ public class ProfileFragment extends Fragment{
         Glide.with(getContext()).load(imgUrl).transform(new RoundedCorners(100)).into(ivProfile);
 
         //Create the adapter
-        adapter = new ImageGridAdapter(getContext(), postList);
+        adapter = new GridAdapter(getContext(), postList);
 
         //Set the adapter on the gridView
         gridView.setAdapter(adapter);

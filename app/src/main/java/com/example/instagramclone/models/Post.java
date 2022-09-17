@@ -61,9 +61,8 @@ public class Post extends ParseObject {
     }
     public void setListComment(ParseObject comment){add(KEY_COMMENT, comment);}
 
-    public static List<String> fromJsonArray(JSONArray jsonArray) throws JSONException {
-        List<String> listUserLike = new ArrayList<String>();
-
+    public static ArrayList<String> fromJsonArray(JSONArray jsonArray) throws JSONException {
+        ArrayList<String> listUserLike = new ArrayList<String>();
         try {
             for (int i = 0; i < jsonArray.length(); i++){
                 listUserLike.add(jsonArray.getJSONObject(i).getString("objectId"));
@@ -71,7 +70,6 @@ public class Post extends ParseObject {
         }catch (NullPointerException e){
             e.printStackTrace();
         }
-
         return listUserLike;
     }
 }
