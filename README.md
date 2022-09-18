@@ -34,7 +34,7 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='insta2.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='insta2.gif' title='Video Walkthrough' width='' alt='Video Walkthrough2' />
 
 GIF created with Peek.
 
